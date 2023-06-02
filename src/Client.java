@@ -34,21 +34,18 @@ public class Client{
         boolean jogadorPar;
         boolean adversarioPar;
         boolean modoCONTRAPC;
-        boolean pgtjogarDnv; //é isso mesmo?
+        boolean pgtjogarDnv; 
         int numeroJogador, numeroAdversario;
         int jogadorPontuacao = 0;
         int adversarioPontuacao = 0;
         BufferedReader entrada;
         
-        //BufferedWriter saida;
-        
-        //pede e obtem nickname de usuario
         System.out.print("Digite seu nome: ");
         Jogador = scannerC.nextLine();
 
         Socket socket = new Socket("127.0.0.1", porta);
 
-        //fluxo de dados
+        
         entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         saida = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
@@ -65,27 +62,27 @@ public class Client{
 
         System.out.println("\n*************** BEM VINDO AO JOGO DE PAR OU IMPAR ***************\n 1 - Contra PC \n 2 - PvP");
 
-        //obtem o modoJogo da partida
+        
         System.out.println("Por favor, defina um Modo de Jogo: ");
         modoCONTRAPC = validarModoJogo(1, 2, "Modo Jogo escolhido invalido! Insira 1 (Contra PC) ou 2 (PvP)") == 1;
         transmissaoManipulador(String.valueOf(modoCONTRAPC));
 
-        //pega e apresenta o oponente
+        
         System.out.println("Aguardando um adversario...");
-        Adversario = entrada.readLine(); //pega
-        System.out.println("Seu adversario é "+ Adversario); //apresenta
+        Adversario = entrada.readLine(); 
+        System.out.println("Seu adversario é "+ Adversario); 
 
         do{
-            //MOSTRA ROUND ATUAL
+            
             System.out.println("\n ROUND " + ++roundAtual);
             do{
-                //PEGA ESCOLHA DE IMPAR OU
+                
                 System.out.println("Escolha [1] IMPAR ou [2] PAR");
                 jogadorPar = validarModoJogo(1, 2, "\n Escolha invalido!\n Insira uma escolha valida! [1] (PAR) ou [2] (IMPAR)" ) ==2;
                 transmissaoManipulador(String.valueOf(jogadorPar));
                 System.out.println("Aguardando " + Adversario + " fazer sua escolha");
 
-                //obtem escolha par ou impar do adversario
+                
                 adversarioPar = Boolean.parseBoolean(entrada.readLine());
                 if(adversarioPar){
                     System.out.println(Adversario + " escolheu ser PAR..");
@@ -95,18 +92,18 @@ public class Client{
 
             } while(jogadorPar == adversarioPar);
 
-            //pgt numero escolhido do jogador,armazena e transforma em string
+            
             System.out.println("Agora, escolha um numero entre 0 e 5");
             numeroJogador = validarModoJogo(0, 5 , "\nNumero invalido!\n Insira um numero entre 0 e 5: ");
             transmissaoManipulador(String.valueOf(numeroJogador));
             System.out.println("Aguardando " + Adversario + " inserir um numero..");
 
 
-            //obtem numero do adversario via manipulador
+            
             numeroAdversario = Integer.parseInt(entrada.readLine());
             System.out.println(Adversario + " inseriu o numero: " + numeroAdversario); 
 
-            //valida lógica do jogo com os valores recebidos
+            
             if(jogadorPar == ((numeroAdversario + numeroJogador) % 2 == 0)){
                 System.out.println("Voce ganhou! :)");
                 jogadorPontuacao++;

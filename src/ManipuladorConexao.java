@@ -12,15 +12,13 @@ public class ManipuladorConexao implements Runnable {
     private BufferedReader entrada;
     private BufferedWriter saida;
     private String nomeJogador;
-    private int numeroAleatorioPar = 10; //SEM O 10
+    private int numeroAleatorioPar = 10;
     private boolean escolhaPar, pgtjogarDnv, jogarDnvRecebido, numeroAleatorioRecebidoPar, escolhaParRecebido;
-    private ManipuladorConexao adversarioManipulador; // ?
+    private ManipuladorConexao adversarioManipulador;
     private Socket socketClient;
 
     public ManipuladorConexao(Socket socketClient) {
         try {
-            // fluxo de dados do manipulador
-
             this.socketClient = socketClient;
             entrada = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
             saida = new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream()));
@@ -28,7 +26,7 @@ public class ManipuladorConexao implements Runnable {
         } catch (IOException manipulador) {
             manipulador.getMessage();
             fecharTudo();
-            // TEM QUE CRIAR ESSA PORRA sairTudo();
+           
         }
     }
 
@@ -57,9 +55,8 @@ public class ManipuladorConexao implements Runnable {
             transmissaoManipulador("Jogador conectado");
             System.out.println(nomeJogador + " entrou no jogo!");
 
-            //verifica se o jogador vai jogar contra o servidor ou outro jogador;
             String nomeAdversario;
-            boolean modoPVP = !Boolean.parseBoolean(entrada.readLine()); //1 or 2 = 
+            boolean modoPVP = !Boolean.parseBoolean(entrada.readLine());
 
             if(modoPVP){
                 lista_de_conexoes.add(this);
@@ -79,14 +76,12 @@ public class ManipuladorConexao implements Runnable {
 
             do {
                 if(!modoPVP){
-                    escolhaPar = Boolean.parseBoolean(entrada.readLine()); //1 = impar odd (0) {false}, 2 = par even(1) {true}, validando se    escolheu par
-                    transmissaoManipulador(String.valueOf(!escolhaPar)); //oq é essa transmissão? PESSIMA INTERPRETAÇÃO
+                    escolhaPar = Boolean.parseBoolean(entrada.readLine()); 
+                    transmissaoManipulador(String.valueOf(!escolhaPar)); 
 
-                    numeroAleatorioPar = Integer.parseInt(entrada.readLine()); //pega escolha do numero (par) e transforma em int
-                    transmissaoManipulador(String.valueOf(new Random().nextInt(6))); //envia um numero aleatorio p/ array
+                    numeroAleatorioPar = Integer.parseInt(entrada.readLine()); 
+                    transmissaoManipulador(String.valueOf(new Random().nextInt(6))); 
 
-                    // Manda para o jogador que a máquina vai jogar até ele querer parar
-                    //vai querer jogar dnv?
                     pgtjogarDnv = Boolean.parseBoolean(entrada.readLine());
                     transmissaoManipulador(String.valueOf(pgtjogarDnv));
                 } else {
@@ -101,26 +96,25 @@ public class ManipuladorConexao implements Runnable {
                         while(true) {
                             System.out.println(" ");
                             if(adversarioManipulador.escolhaParRecebido){
-                                transmissaoManipulador(String.valueOf(adversarioManipulador.escolhaPar)); //
+                                transmissaoManipulador(String.valueOf(adversarioManipulador.escolhaPar));
                                 break;
 
                             }
                         } escolhaParRecebido = false;
                     } while (escolhaPar == adversarioManipulador.escolhaPar);
                     
-                    //obtém número do adversario e envia para o jogador
+                    
                     numeroAleatorioPar = Integer.parseInt(entrada.readLine());
                     numeroAleatorioRecebidoPar = true;
 
                     while(true){
                         System.out.println(" ");
                         if(adversarioManipulador.numeroAleatorioRecebidoPar){
-                            transmissaoManipulador(String.valueOf(adversarioManipulador.numeroAleatorioPar)); //WHATA??
+                            transmissaoManipulador(String.valueOf(adversarioManipulador.numeroAleatorioPar));
                             break;
                         }
                     }
 
-                    // Verifica se o jogador vai continuar esta partida
                     pgtjogarDnv = Boolean.parseBoolean(entrada.readLine());
                     jogarDnvRecebido = true;
 
@@ -133,12 +127,12 @@ public class ManipuladorConexao implements Runnable {
                     }
                     transmissaoManipulador(String.valueOf(pgtjogarDnv));
                 } 
-            }   while(pgtjogarDnv); //precisa descobrir o pq?
+            }   while(pgtjogarDnv);
                 fecharTudo();
 
         } catch (IOException manipulador) {
-            //manipulador.getMessage();
             fecharTudo();
+            manipulador.getMessage();
         }
     }
 

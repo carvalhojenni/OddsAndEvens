@@ -8,7 +8,6 @@ public class Server {
             final int porta = 7777;
 
             try {
-                //reservar porta p/ servidor
                 ServerSocket serverSocket = new ServerSocket(porta);
                 System.out.println("O Servidor esta disponvel! ||  Porta: "+porta);
 
@@ -18,7 +17,7 @@ public class Server {
                     new Thread(new ManipuladorConexao(socketClient)).start();
                 }
             } catch (IOException e) {
-                
+                e.getMessage();
             }
         }
 }
